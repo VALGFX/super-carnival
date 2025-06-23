@@ -40,3 +40,29 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Eroare server.' }, { status: 500 })
     }
 }
+
+// --- Aici funcția DELETE pentru ștergerea produsului după id ---
+
+export async function DELETE(req: Request) {
+    try {
+        await connectDB()
+
+        const { searchParams } = new URL(req.url)
+        const id = searchParams.get('id')
+
+        if (!id) {
+            return NextResponse.json({ error: 'ID-ul produsului este obligatoriu.' }, { status: 400 })
+        }
+
+        const deleted = await Product.findByIdAndDelete(id)
+
+        if (!deleted) {
+            return NextResponse.json({ error: 'Produsul nu a fost găsit.' }, { status: 404 })
+        }
+
+        return NextResponse.json({ message: 'Produs șters cu succes.' })
+    } catch (error) {
+        console.error('Eroare la ștergere produs:', error)
+        return NextResponse.json({ error: 'Eroare server.' }, { status: 500 })
+    }
+}
