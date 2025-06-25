@@ -1,4 +1,4 @@
-import dbConnect from '@/lib/mongodb'
+import { connectDB } from '@/lib/db';
 import Product from '@/models/Product'
 import { NextApiRequest, NextApiResponse } from 'next'
 
@@ -8,7 +8,7 @@ export default async function handler(
 ) {
 	const { id } = req.query
 
-	await dbConnect()
+	await connectDB()
 
 	if (req.method === 'DELETE') {
 		try {
